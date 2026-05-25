@@ -1,0 +1,25 @@
+# dev env — re-generate with: cd envs/dev/app && terragrunt apply
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: alpine
+  pullPolicy: IfNotPresent
+
+nameOverride: hello-app
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+networkPolicy:
+  enabled: true

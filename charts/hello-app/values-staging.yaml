@@ -1,0 +1,25 @@
+# staging env — re-generate with: cd envs/staging/app && terragrunt apply
+
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: alpine
+  pullPolicy: IfNotPresent
+
+nameOverride: hello-app
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+networkPolicy:
+  enabled: true

@@ -1,0 +1,17 @@
+# Developer notes — never commit
+DEVLOG.md
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfplan
+crash.log
+
+# Terragrunt cache
+.terragrunt-cache/
+
+# OS
+.DS_Store
+Thumbs.db
