@@ -1,0 +1,12 @@
+{{- if .Values.html }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hello-app.fullname" . }}-html
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hello-app.labels" . | nindent 4 }}
+data:
+  index.html: |
+    {{ .Values.html | nindent 4 }}
+{{- end }}

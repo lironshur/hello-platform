@@ -10,6 +10,8 @@ fullnameOverride: ""
 
 args: []
 
+html: null
+
 service:
   type: ClusterIP
   port: 80

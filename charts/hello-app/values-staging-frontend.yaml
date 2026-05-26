@@ -10,6 +10,15 @@ image:
 nameOverride: frontend
 args: []
 
+html: |
+  <!DOCTYPE html>
+  <html>
+    <body>
+      <h1>Hello World</h1>
+      <p>staging environment</p>
+    </body>
+  </html>
+
 service:
   type: NodePort
   port: 80
