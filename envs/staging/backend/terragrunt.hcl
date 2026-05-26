@@ -3,12 +3,13 @@ terraform {
 }
 
 inputs = {
-  name       = "backend"
-  image      = "hashicorp/http-echo"
-  replicas   = 2
-  port       = 5678
-  namespace  = "staging"
-  args       = ["-text=hello from backend", "-listen=:5678"]
+  name      = "backend"
+  image     = "hashicorp/http-echo"
+  replicas  = 2
+  port      = 5678
+  node_port = 30084
+  namespace = "staging"
+  args      = ["-text=hello from backend", "-listen=:5678"]
   output_dir = "../../../charts/hello-app"
 
   ingress_from_app = "frontend"

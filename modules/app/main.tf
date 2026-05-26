@@ -22,8 +22,9 @@ locals {
       pullPolicy = "IfNotPresent"
     }
     service = {
-      type = "ClusterIP"
-      port = var.port
+      type     = var.node_port != null ? "NodePort" : "ClusterIP"
+      port     = var.port
+      nodePort = var.node_port
     }
     nameOverride = var.name
     args         = var.args

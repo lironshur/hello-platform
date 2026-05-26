@@ -17,6 +17,12 @@ variable "port" {
   default = 80
 }
 
+variable "node_port" {
+  type        = number
+  description = "NodePort to expose the service on (30000-32767)"
+  default     = null
+}
+
 variable "namespace" {
   type        = string
   description = "used as part of the generated values filename"

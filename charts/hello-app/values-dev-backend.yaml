@@ -13,8 +13,9 @@ args:
   - -listen=:5678
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 5678
+  nodePort: 30082
 
 readinessProbe:
   httpGet:

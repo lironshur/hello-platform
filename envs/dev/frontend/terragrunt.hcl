@@ -3,12 +3,13 @@ terraform {
 }
 
 inputs = {
-  name       = "frontend"
-  image      = "nginx:alpine"
-  replicas   = 1
-  port       = 80
-  namespace  = "dev"
-  args       = []
+  name      = "frontend"
+  image     = "nginx:alpine"
+  replicas  = 1
+  port      = 80
+  node_port = 30081
+  namespace = "dev"
+  args      = []
   output_dir = "../../../charts/hello-app"
 
   ingress_from_app = ""
