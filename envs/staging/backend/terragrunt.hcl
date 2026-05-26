@@ -3,21 +3,24 @@ terraform {
 }
 
 inputs = {
-  name       = "hello-app"
-  image      = "nginx:alpine"
+  name       = "backend"
+  image      = "hashicorp/http-echo"
   replicas   = 2
-  port       = 80
+  port       = 5678
   namespace  = "staging"
+  args       = ["-text=hello from backend", "-listen=:5678"]
   output_dir = "../../../charts/hello-app"
+
+  ingress_from_app = "frontend"
 
   resources = {
     requests = {
       cpu    = "100m"
-      memory = "128Mi"
+      memory = "64Mi"
     }
     limits = {
       cpu    = "200m"
-      memory = "256Mi"
+      memory = "128Mi"
     }
   }
 }

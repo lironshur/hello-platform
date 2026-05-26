@@ -1,20 +1,24 @@
 # hello-platform
 
-A local GitOps setup for deploying a simple nginx Hello World service using ArgoCD, Helm, Terraform and Terragrunt. Runs on kind (Kubernetes in Docker) with two environments — dev and staging.
+A local GitOps setup deploying a frontend and backend Hello World service using ArgoCD, Helm, Terraform and Terragrunt. Runs on kind (Kubernetes in Docker) with two environments — dev and staging.
 
 ## How it works
 
-Terragrunt generates per-environment Helm values files. Those get committed to this repo. ArgoCD watches the repo and keeps the cluster in sync automatically.
+Terragrunt generates per-environment Helm values files for each service. Those get committed to this repo. ArgoCD watches the repo and keeps the cluster in sync automatically.
 
 ```
 GitHub repo → ArgoCD → kind cluster
-                         ├── dev namespace      (1 replica)
-                         └── staging namespace  (2 replicas)
+                         ├── dev namespace
+                         │     ├── frontend  (nginx:alpine, port 80)
+                         │     └── backend   (http-echo, port 5678)
+                         └── staging namespace
+                               ├── frontend  (2 replicas)
+                               └── backend   (2 replicas)
 ```
 
-## Prerequisites
+The backend NetworkPolicy only allows ingress from frontend pods — nothing else can reach it directly.
 
-You'll need these installed before starting:
+## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) — kind runs inside Docker
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
@@ -58,8 +62,10 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 The values files are already committed, but if you change anything in the Terragrunt configs re-run this:
 
 ```bash
-cd envs/dev/app && terragrunt apply && cd ../../..
-cd envs/staging/app && terragrunt apply && cd ../../..
+cd envs/dev/frontend && terragrunt apply && cd ../../..
+cd envs/dev/backend && terragrunt apply && cd ../../..
+cd envs/staging/frontend && terragrunt apply && cd ../../..
+cd envs/staging/backend && terragrunt apply && cd ../../..
 ```
 
 Then commit and push the updated values files.
@@ -69,8 +75,10 @@ Then commit and push the updated values files.
 ```bash
 argocd login localhost:8080 --username admin --password <password> --insecure
 
-kubectl apply -f argocd/app-dev.yaml
-kubectl apply -f argocd/app-staging.yaml
+kubectl apply -f argocd/dev-frontend.yaml
+kubectl apply -f argocd/dev-backend.yaml
+kubectl apply -f argocd/staging-frontend.yaml
+kubectl apply -f argocd/staging-backend.yaml
 ```
 
 ArgoCD will create the namespaces and sync everything automatically.
@@ -85,24 +93,30 @@ kubectl get pods -n staging
 
 Port-forward to test locally:
 ```bash
-kubectl port-forward svc/hello-app -n dev 8081:80
+# dev frontend
+kubectl port-forward svc/frontend -n dev 8081:80
 # http://localhost:8081
 
-kubectl port-forward svc/hello-app -n staging 8082:80
+# dev backend
+kubectl port-forward svc/backend -n dev 8082:5678
 # http://localhost:8082
 ```
 
 ## Project layout
 
 ```
-├── modules/app/          # terraform module — outputs a helm values file
+├── modules/app/              # terraform module — outputs a helm values file
 ├── envs/
-│   ├── dev/app/          # 1 replica, low resource limits
-│   └── staging/app/      # 2 replicas, higher limits
-├── charts/hello-app/     # the actual helm chart
+│   ├── dev/
+│   │   ├── frontend/         # 1 replica, nginx:alpine
+│   │   └── backend/          # 1 replica, http-echo, restricted ingress
+│   └── staging/
+│       ├── frontend/         # 2 replicas
+│       └── backend/          # 2 replicas
+├── charts/hello-app/         # single shared helm chart
 │   └── templates/
-├── argocd/               # one Application manifest per env
-└── .github/workflows/    # helm lint on PR
+├── argocd/                   # one Application manifest per service per env
+└── .github/workflows/        # helm lint on PR
 ```
 
 ## Cleanup

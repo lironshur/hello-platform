@@ -1,4 +1,4 @@
-# staging env — re-generate with: cd envs/staging/app && terragrunt apply
+# staging frontend — re-generate with: cd envs/staging/frontend && terragrunt apply
 
 replicaCount: 2
 
@@ -7,7 +7,8 @@ image:
   tag: alpine
   pullPolicy: IfNotPresent
 
-nameOverride: hello-app
+nameOverride: frontend
+args: []
 
 service:
   type: ClusterIP
@@ -23,3 +24,4 @@ resources:
 
 networkPolicy:
   enabled: true
+  ingressFromApp: ""

@@ -26,14 +26,16 @@ locals {
       port = var.port
     }
     nameOverride = var.name
+    args         = var.args
     resources    = var.resources
     networkPolicy = {
-      enabled = true
+      enabled        = true
+      ingressFromApp = var.ingress_from_app
     }
   }
 }
 
 resource "local_file" "helm_values" {
   content  = yamlencode(local.values)
-  filename = "${var.output_dir}/values-${var.namespace}.yaml"
+  filename = "${var.output_dir}/values-${var.namespace}-${var.name}.yaml"
 }

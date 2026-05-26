@@ -1,0 +1,37 @@
+# staging backend — re-generate with: cd envs/staging/backend && terragrunt apply
+
+replicaCount: 2
+
+image:
+  repository: hashicorp/http-echo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nameOverride: backend
+args:
+  - -text=hello from backend
+  - -listen=:5678
+
+service:
+  type: ClusterIP
+  port: 5678
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5678
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 3
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+networkPolicy:
+  enabled: true
+  ingressFromApp: frontend

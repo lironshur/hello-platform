@@ -8,6 +8,8 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
+args: []
+
 service:
   type: ClusterIP
   port: 80
@@ -30,3 +32,4 @@ readinessProbe:
 
 networkPolicy:
   enabled: true
+  ingressFromApp: ""

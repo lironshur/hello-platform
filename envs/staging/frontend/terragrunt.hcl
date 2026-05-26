@@ -3,21 +3,24 @@ terraform {
 }
 
 inputs = {
-  name       = "hello-app"
+  name       = "frontend"
   image      = "nginx:alpine"
-  replicas   = 1
+  replicas   = 2
   port       = 80
-  namespace  = "dev"
+  namespace  = "staging"
+  args       = []
   output_dir = "../../../charts/hello-app"
+
+  ingress_from_app = ""
 
   resources = {
     requests = {
-      cpu    = "50m"
-      memory = "64Mi"
-    }
-    limits = {
       cpu    = "100m"
       memory = "128Mi"
+    }
+    limits = {
+      cpu    = "200m"
+      memory = "256Mi"
     }
   }
 }

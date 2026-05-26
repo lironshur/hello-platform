@@ -1,4 +1,4 @@
-# dev env — re-generate with: cd envs/dev/app && terragrunt apply
+# dev frontend — re-generate with: cd envs/dev/frontend && terragrunt apply
 
 replicaCount: 1
 
@@ -7,7 +7,8 @@ image:
   tag: alpine
   pullPolicy: IfNotPresent
 
-nameOverride: hello-app
+nameOverride: frontend
+args: []
 
 service:
   type: ClusterIP
@@ -23,3 +24,4 @@ resources:
 
 networkPolicy:
   enabled: true
+  ingressFromApp: ""

@@ -19,8 +19,20 @@ variable "port" {
 
 variable "namespace" {
   type        = string
-  description = "used as the suffix for the generated values filename"
+  description = "used as part of the generated values filename"
   default     = "dev"
+}
+
+variable "args" {
+  type        = list(string)
+  description = "optional container args (e.g. for http-echo)"
+  default     = []
+}
+
+variable "ingress_from_app" {
+  type        = string
+  description = "restrict ingress to pods with this app name (leave empty to allow all)"
+  default     = ""
 }
 
 variable "resources" {
