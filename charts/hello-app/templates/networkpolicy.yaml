@@ -2,14 +2,14 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ .Values.nameOverride }}
+  name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.nameOverride }}
+    app: {{ .Values.name }}
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Values.nameOverride }}
+      app: {{ .Values.name }}
   policyTypes:
     - Ingress
     - Egress

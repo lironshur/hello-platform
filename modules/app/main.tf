@@ -28,7 +28,7 @@ locals {
       port     = var.port
       nodePort = var.node_port
     }
-    nameOverride = var.name
+    name = var.name
     args         = var.args
     resources    = var.resources
     networkPolicy = {

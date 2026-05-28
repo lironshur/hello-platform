@@ -5,8 +5,7 @@ image:
   tag: alpine
   pullPolicy: IfNotPresent
 
-nameOverride: ""
-fullnameOverride: ""
+name: ""
 
 args: []
 

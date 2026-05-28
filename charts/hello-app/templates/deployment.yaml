@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.nameOverride }}
+  name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.nameOverride }}
+    app: {{ .Values.name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.nameOverride }}
+      app: {{ .Values.name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.nameOverride }}
+        app: {{ .Values.name }}
     spec:
       containers:
-        - name: {{ .Values.nameOverride }}
+        - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # args are only needed for images like http-echo that require flags to run
@@ -46,5 +46,5 @@ spec:
       volumes:
         - name: html
           configMap:
-            name: {{ .Values.nameOverride }}-html
+            name: {{ .Values.name }}-html
       {{- end }}
