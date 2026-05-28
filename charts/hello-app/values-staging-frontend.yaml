@@ -4,9 +4,6 @@
   "repository": "nginx"
   "tag": "alpine"
 "name": "frontend"
-"networkPolicy":
-  "enabled": true
-  "ingressFromApp": ""
 "replicaCount": 2
 "resources":
   "limits":
@@ -18,4 +15,3 @@
 "service":
   "nodePort": 30083
   "port": 80
-  "type": "NodePort"

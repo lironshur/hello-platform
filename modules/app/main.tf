@@ -23,18 +23,12 @@ locals {
       pullPolicy = "IfNotPresent"
     }
     service = {
-      # node_port is optional — if provided, expose via NodePort, otherwise keep it internal (ClusterIP)
-      type     = var.node_port != null ? "NodePort" : "ClusterIP"
       port     = var.port
       nodePort = var.node_port
     }
-    name = var.name
-    args         = var.args
-    resources    = var.resources
-    networkPolicy = {
-      enabled        = true
-      ingressFromApp = var.ingress_from_app
-    }
+    name      = var.name
+    args      = var.args
+    resources = var.resources
   }
 }
 

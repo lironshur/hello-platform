@@ -94,9 +94,7 @@ kubectl get pods -n staging
 Open in browser (NodePort via kind port mappings):
 ```
 http://localhost:8081   # dev frontend
-http://localhost:8082   # dev backend
 http://localhost:8083   # staging frontend
-http://localhost:8084   # staging backend
 ```
 
 ## Project layout

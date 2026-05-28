@@ -35,12 +35,6 @@ variable "args" {
   default     = []
 }
 
-variable "ingress_from_app" {
-  type        = string
-  description = "restrict ingress to pods with this app name (leave empty to allow all)"
-  default     = ""
-}
-
 variable "resources" {
   type = object({
     requests = object({

@@ -12,8 +12,6 @@ inputs = {
   args      = []
   output_dir = "${get_repo_root()}/charts/hello-app"
 
-  ingress_from_app = ""
-
   resources = {
     requests = {
       cpu    = "100m"

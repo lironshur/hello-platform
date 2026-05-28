@@ -6,14 +6,15 @@ metadata:
   labels:
     app: {{ .Values.name }}
 spec:
-  type: {{ .Values.service.type }}
+  # frontend is exposed via NodePort so the browser can reach it directly
+  # backend only needs to be reachable from within the cluster
+  type: {{ if eq .Values.name "frontend" }}NodePort{{ else }}ClusterIP{{ end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http
-      # nodePort is only set when type is NodePort, ignored otherwise
-      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
+      {{- if eq .Values.name "frontend" }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
   selector:

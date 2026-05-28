@@ -11,12 +11,6 @@ nodes:
       - containerPort: 30081
         hostPort: 8081  # dev frontend
         protocol: TCP
-      - containerPort: 30082
-        hostPort: 8082  # dev backend
-        protocol: TCP
       - containerPort: 30083
         hostPort: 8083  # staging frontend
-        protocol: TCP
-      - containerPort: 30084
-        hostPort: 8084  # staging backend
         protocol: TCP

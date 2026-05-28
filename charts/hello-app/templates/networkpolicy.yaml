@@ -1,4 +1,3 @@
-{{- if .Values.networkPolicy.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -7,6 +6,7 @@ metadata:
   labels:
     app: {{ .Values.name }}
 spec:
+  # applies this policy to pods with this app label
   podSelector:
     matchLabels:
       app: {{ .Values.name }}
@@ -14,22 +14,21 @@ spec:
     - Ingress
     - Egress
   ingress:
-    # if ingressFromApp is set, only allow traffic from that specific app
-    # this is used to restrict the backend so only the frontend can reach it
-    {{- if .Values.networkPolicy.ingressFromApp }}
+    {{- if eq .Values.name "backend" }}
+    # backend: only allow traffic from the frontend pod — nothing else can reach it directly
     - from:
         - podSelector:
             matchLabels:
-              app: {{ .Values.networkPolicy.ingressFromApp }}
+              app: frontend
       ports:
         - port: {{ .Values.service.port }}
           protocol: TCP
     {{- else }}
+    # frontend: allow ingress from anywhere so the browser can reach it
     - ports:
         - port: {{ .Values.service.port }}
           protocol: TCP
     {{- end }}
-  # allow all egress so pods can reach DNS, other services, etc.
+  # allow all egress so pods can reach DNS and other services
   egress:
     - {}
-{{- end }}

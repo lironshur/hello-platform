@@ -10,7 +10,6 @@ name: ""
 args: []
 
 service:
-  type: ClusterIP
   port: 80
   nodePort: null
 
@@ -22,6 +21,3 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-networkPolicy:
-  enabled: true
-  ingressFromApp: ""

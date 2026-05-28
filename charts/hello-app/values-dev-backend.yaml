@@ -6,9 +6,6 @@
   "repository": "hashicorp/http-echo"
   "tag": "latest"
 "name": "backend"
-"networkPolicy":
-  "enabled": true
-  "ingressFromApp": "frontend"
 "replicaCount": 1
 "resources":
   "limits":
@@ -18,6 +15,5 @@
     "cpu": "50m"
     "memory": "32Mi"
 "service":
-  "nodePort": 30082
+  "nodePort": null
   "port": 5678
-  "type": "NodePort"
