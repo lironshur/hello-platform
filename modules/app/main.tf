@@ -23,7 +23,7 @@ locals {
       pullPolicy = "IfNotPresent"
     }
     service = {
-      # if a nodePort was given, use NodePort — otherwise default to ClusterIP
+      # node_port is optional — if provided, expose via NodePort, otherwise keep it internal (ClusterIP)
       type     = var.node_port != null ? "NodePort" : "ClusterIP"
       port     = var.port
       nodePort = var.node_port
