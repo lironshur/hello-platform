@@ -10,7 +10,7 @@ inputs = {
   node_port = 30082
   namespace = "dev"
   args      = ["-text=hello world", "-listen=:5678"]
-  output_dir = "../../../charts/hello-app"
+  output_dir = "${get_repo_root()}/charts/hello-app"
 
   # only the frontend is allowed to reach the backend
   ingress_from_app = "frontend"

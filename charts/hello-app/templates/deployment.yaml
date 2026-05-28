@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # name and namespace come from the values file — same template serves frontend and backend
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
   labels:
@@ -19,37 +20,41 @@ spec:
         - name: {{ .Values.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # args are only needed for images like http-echo that require flags to run
-          {{- if .Values.args }}
+          # backend (http-echo) requires flags to set the response text and listen port
+          {{- if eq .Values.name "backend" }}
           args:
             {{- toYaml .Values.args | nindent 12 }}
           {{- end }}
           ports:
-            # naming the port lets the service and probes reference it by name
+            # naming the port lets the service and readiness probe reference it by name
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # readiness probe tells k8s when the pod is ready to serve traffic
-          # without this, requests can hit the pod before it's actually up
+          # tells k8s when the pod is ready to receive traffic — without this,
+          # requests can hit the pod before the server is actually up
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          # toYaml serializes the resources object and nindent aligns it under resources:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if or .Values.html .Values.nginxConf }}
+          # frontend only — mounts the custom HTML page and nginx config from the ConfigMap
+          {{- if eq .Values.name "frontend" }}
           volumeMounts:
-            {{- if .Values.html }}
             - name: config
               mountPath: /usr/share/nginx/html/index.html
               subPath: index.html
-            {{- end }}
-            {{- if .Values.nginxConf }}
-            # replaces the default nginx config to enable the /api proxy
+            # overrides the default nginx config to add the /api proxy_pass rule
             - name: config
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: default.conf
-            {{- end }}
           {{- end }}
-      {{- if or .Values.html .Values.nginxConf }}
+      # frontend only — the ConfigMap holding index.html and default.conf
+      {{- if eq .Values.name "frontend" }}
       volumes:
         - name: config
           configMap:

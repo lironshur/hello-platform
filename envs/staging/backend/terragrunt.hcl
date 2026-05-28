@@ -10,7 +10,7 @@ inputs = {
   node_port = 30084
   namespace = "staging"
   args      = ["-text=hello world", "-listen=:5678"]
-  output_dir = "../../../charts/hello-app"
+  output_dir = "${get_repo_root()}/charts/hello-app"
 
   ingress_from_app = "frontend"
 

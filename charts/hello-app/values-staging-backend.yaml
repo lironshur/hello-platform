@@ -1,38 +1,23 @@
-# staging backend — re-generate with: cd envs/staging/backend && terragrunt apply
-
-replicaCount: 2
-
-image:
-  repository: hashicorp/http-echo
-  tag: latest
-  pullPolicy: IfNotPresent
-
-name: backend
-args:
-  - -text=hello world
-  - -listen=:5678
-
-service:
-  type: NodePort
-  port: 5678
-  nodePort: 30084
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: 5678
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  failureThreshold: 3
-
-resources:
-  requests:
-    cpu: 100m
-    memory: 64Mi
-  limits:
-    cpu: 200m
-    memory: 128Mi
-
-networkPolicy:
-  enabled: true
-  ingressFromApp: frontend
+"args":
+- "-text=hello world"
+- "-listen=:5678"
+"image":
+  "pullPolicy": "IfNotPresent"
+  "repository": "hashicorp/http-echo"
+  "tag": "latest"
+"name": "backend"
+"networkPolicy":
+  "enabled": true
+  "ingressFromApp": "frontend"
+"replicaCount": 2
+"resources":
+  "limits":
+    "cpu": "200m"
+    "memory": "128Mi"
+  "requests":
+    "cpu": "100m"
+    "memory": "64Mi"
+"service":
+  "nodePort": 30084
+  "port": 5678
+  "type": "NodePort"

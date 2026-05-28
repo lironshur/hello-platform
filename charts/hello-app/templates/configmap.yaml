@@ -1,4 +1,4 @@
-{{- if or .Values.html .Values.nginxConf }}
+{{- if eq .Values.name "frontend" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,13 +7,29 @@ metadata:
   labels:
     app: {{ .Values.name }}
 data:
-  {{- if .Values.html }}
   index.html: |
-    {{ .Values.html | nindent 4 }}
-  {{- end }}
-  {{- if .Values.nginxConf }}
-  # replaces the default nginx server block to add the /api proxy rule
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <h1 id="message">Loading...</h1>
+        <script>
+          fetch('/api')
+            .then(r => r.text())
+            .then(text => document.getElementById('message').textContent = text.trim())
+            .catch(() => document.getElementById('message').textContent = 'error connecting to backend')
+        </script>
+      </body>
+    </html>
+  # proxies /api to the backend so the browser never talks to it directly
   default.conf: |
-    {{ .Values.nginxConf | nindent 4 }}
-  {{- end }}
+    server {
+      listen 80;
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+      }
+      location /api {
+        proxy_pass http://backend:5678;
+      }
+    }
 {{- end }}

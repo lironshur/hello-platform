@@ -1,54 +1,21 @@
-# staging frontend — re-generate with: cd envs/staging/frontend && terragrunt apply
-
-replicaCount: 2
-
-image:
-  repository: nginx
-  tag: alpine
-  pullPolicy: IfNotPresent
-
-name: frontend
-args: []
-
-service:
-  type: NodePort
-  port: 80
-  nodePort: 30083
-
-resources:
-  requests:
-    cpu: 100m
-    memory: 128Mi
-  limits:
-    cpu: 200m
-    memory: 256Mi
-
-networkPolicy:
-  enabled: true
-  ingressFromApp: ""
-
-html: |
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <h1 id="message">Loading...</h1>
-      <script>
-        fetch('/api')
-          .then(r => r.text())
-          .then(text => document.getElementById('message').textContent = text.trim())
-          .catch(() => document.getElementById('message').textContent = 'error connecting to backend')
-      </script>
-    </body>
-  </html>
-
-nginxConf: |
-  server {
-    listen 80;
-    location / {
-      root /usr/share/nginx/html;
-      index index.html;
-    }
-    location /api {
-      proxy_pass http://backend:5678;
-    }
-  }
+"args": []
+"image":
+  "pullPolicy": "IfNotPresent"
+  "repository": "nginx"
+  "tag": "alpine"
+"name": "frontend"
+"networkPolicy":
+  "enabled": true
+  "ingressFromApp": ""
+"replicaCount": 2
+"resources":
+  "limits":
+    "cpu": "200m"
+    "memory": "256Mi"
+  "requests":
+    "cpu": "100m"
+    "memory": "128Mi"
+"service":
+  "nodePort": 30083
+  "port": 80
+  "type": "NodePort"

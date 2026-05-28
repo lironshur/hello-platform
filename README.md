@@ -35,7 +35,7 @@ Make sure Docker Desktop is running before you do anything else.
 **1. Create the cluster**
 
 ```bash
-kind create cluster --name hello-platform
+kind create cluster --name hello-platform --config kind-config.yaml
 ```
 
 **2. Install ArgoCD**
@@ -91,15 +91,12 @@ kubectl get pods -n dev
 kubectl get pods -n staging
 ```
 
-Port-forward to test locally:
-```bash
-# dev frontend
-kubectl port-forward svc/frontend -n dev 8081:80
-# http://localhost:8081
-
-# dev backend
-kubectl port-forward svc/backend -n dev 8082:5678
-# http://localhost:8082
+Open in browser (NodePort via kind port mappings):
+```
+http://localhost:8081   # dev frontend
+http://localhost:8082   # dev backend
+http://localhost:8083   # staging frontend
+http://localhost:8084   # staging backend
 ```
 
 ## Project layout

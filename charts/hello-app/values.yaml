@@ -9,9 +9,6 @@ name: ""
 
 args: []
 
-html: null
-nginxConf: null
-
 service:
   type: ClusterIP
   port: 80
@@ -24,14 +21,6 @@ resources:
   limits:
     cpu: 100m
     memory: 128Mi
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: 80
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  failureThreshold: 3
 
 networkPolicy:
   enabled: true
