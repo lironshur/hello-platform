@@ -1,13 +1,19 @@
-{{- if .Values.html }}
-# only created when html value is set — used to serve a custom index.html via nginx
+{{- if or .Values.html .Values.nginxConf }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.name }}-html
+  name: {{ .Values.name }}-config
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Values.name }}
 data:
+  {{- if .Values.html }}
   index.html: |
     {{ .Values.html | nindent 4 }}
+  {{- end }}
+  {{- if .Values.nginxConf }}
+  # replaces the default nginx server block to add the /api proxy rule
+  default.conf: |
+    {{ .Values.nginxConf | nindent 4 }}
+  {{- end }}
 {{- end }}

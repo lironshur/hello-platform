@@ -9,7 +9,7 @@ image:
 
 name: backend
 args:
-  - -text=hello from backend
+  - -text=hello world
   - -listen=:5678
 
 service:

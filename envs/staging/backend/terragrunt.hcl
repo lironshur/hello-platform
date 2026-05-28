@@ -9,7 +9,7 @@ inputs = {
   port      = 5678
   node_port = 30084
   namespace = "staging"
-  args      = ["-text=hello from backend", "-listen=:5678"]
+  args      = ["-text=hello world", "-listen=:5678"]
   output_dir = "../../../charts/hello-app"
 
   ingress_from_app = "frontend"

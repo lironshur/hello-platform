@@ -9,7 +9,7 @@ inputs = {
   port      = 5678
   node_port = 30082
   namespace = "dev"
-  args      = ["-text=hello from backend", "-listen=:5678"]
+  args      = ["-text=hello world", "-listen=:5678"]
   output_dir = "../../../charts/hello-app"
 
   # only the frontend is allowed to reach the backend

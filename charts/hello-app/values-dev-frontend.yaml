@@ -10,15 +10,6 @@ image:
 name: frontend
 args: []
 
-html: |
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <h1>Hello World</h1>
-      <p>dev environment</p>
-    </body>
-  </html>
-
 service:
   type: NodePort
   port: 80
@@ -35,3 +26,31 @@ resources:
 networkPolicy:
   enabled: true
   ingressFromApp: ""
+
+# JS fetches /api which nginx proxies to the backend — browser never calls backend directly
+html: |
+  <!DOCTYPE html>
+  <html>
+    <body>
+      <h1 id="message">Loading...</h1>
+      <script>
+        fetch('/api')
+          .then(r => r.text())
+          .then(text => document.getElementById('message').textContent = text.trim())
+          .catch(() => document.getElementById('message').textContent = 'error connecting to backend')
+      </script>
+    </body>
+  </html>
+
+# proxy /api to the backend service so the browser never talks to it directly
+nginxConf: |
+  server {
+    listen 80;
+    location / {
+      root /usr/share/nginx/html;
+      index index.html;
+    }
+    location /api {
+      proxy_pass http://backend:5678;
+    }
+  }

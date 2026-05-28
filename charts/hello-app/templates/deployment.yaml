@@ -35,16 +35,23 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          # only mount the html volume if custom content was provided (frontend only)
-          {{- if .Values.html }}
+          {{- if or .Values.html .Values.nginxConf }}
           volumeMounts:
-            - name: html
+            {{- if .Values.html }}
+            - name: config
               mountPath: /usr/share/nginx/html/index.html
               subPath: index.html
+            {{- end }}
+            {{- if .Values.nginxConf }}
+            # replaces the default nginx config to enable the /api proxy
+            - name: config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            {{- end }}
           {{- end }}
-      {{- if .Values.html }}
+      {{- if or .Values.html .Values.nginxConf }}
       volumes:
-        - name: html
+        - name: config
           configMap:
-            name: {{ .Values.name }}-html
+            name: {{ .Values.name }}-config
       {{- end }}

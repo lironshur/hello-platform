@@ -10,6 +10,7 @@ name: ""
 args: []
 
 html: null
+nginxConf: null
 
 service:
   type: ClusterIP
