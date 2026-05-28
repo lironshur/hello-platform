@@ -17,7 +17,7 @@ spec:
     namespace: dev
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: true      # remove resources that were deleted from git
+      selfHeal: true   # revert any manual changes made directly in the cluster
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=true  # create the namespace if it doesn't exist yet

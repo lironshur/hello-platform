@@ -1,4 +1,5 @@
 {{- if .Values.html }}
+# only created when html value is set — used to serve a custom index.html via nginx
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -1,20 +1,22 @@
+# kind runs inside Docker, so NodePort services aren't reachable from the host by default.
+# extraPortMappings tells Docker to forward these host ports into the cluster node.
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
     extraPortMappings:
       - containerPort: 30080
-        hostPort: 8080
+        hostPort: 8080  # ArgoCD UI
         protocol: TCP
       - containerPort: 30081
-        hostPort: 8081
+        hostPort: 8081  # dev frontend
         protocol: TCP
       - containerPort: 30082
-        hostPort: 8082
+        hostPort: 8082  # dev backend
         protocol: TCP
       - containerPort: 30083
-        hostPort: 8083
+        hostPort: 8083  # staging frontend
         protocol: TCP
       - containerPort: 30084
-        hostPort: 8084
+        hostPort: 8084  # staging backend
         protocol: TCP

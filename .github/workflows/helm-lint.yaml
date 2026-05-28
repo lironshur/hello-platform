@@ -21,11 +21,18 @@ jobs:
         with:
           version: "3.14.0"
 
+      # lint with defaults first, then with each env values file to catch overrides
       - name: Lint default values
         run: helm lint charts/hello-app
 
-      - name: Lint with dev values
-        run: helm lint charts/hello-app -f charts/hello-app/values-dev.yaml
+      - name: Lint dev frontend
+        run: helm lint charts/hello-app -f charts/hello-app/values-dev-frontend.yaml
 
-      - name: Lint with staging values
-        run: helm lint charts/hello-app -f charts/hello-app/values-staging.yaml
+      - name: Lint dev backend
+        run: helm lint charts/hello-app -f charts/hello-app/values-dev-backend.yaml
+
+      - name: Lint staging frontend
+        run: helm lint charts/hello-app -f charts/hello-app/values-staging-frontend.yaml
+
+      - name: Lint staging backend
+        run: helm lint charts/hello-app -f charts/hello-app/values-staging-backend.yaml

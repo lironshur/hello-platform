@@ -12,6 +12,7 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+      # nodePort is only set when type is NodePort, ignored otherwise
       {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}

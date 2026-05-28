@@ -14,6 +14,8 @@ spec:
     - Ingress
     - Egress
   ingress:
+    # if ingressFromApp is set, only allow traffic from that specific app
+    # this is used to restrict the backend so only the frontend can reach it
     {{- if .Values.networkPolicy.ingressFromApp }}
     - from:
         - podSelector:
@@ -27,6 +29,7 @@ spec:
         - port: {{ .Values.service.port }}
           protocol: TCP
     {{- end }}
+  # allow all egress so pods can reach DNS, other services, etc.
   egress:
     - {}
 {{- end }}

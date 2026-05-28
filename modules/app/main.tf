@@ -10,6 +10,7 @@ terraform {
 }
 
 locals {
+  # split "nginx:alpine" into repo and tag so helm gets them separately
   image_parts = split(":", var.image)
   image_repo  = local.image_parts[0]
   image_tag   = length(local.image_parts) > 1 ? local.image_parts[1] : "latest"
@@ -22,6 +23,7 @@ locals {
       pullPolicy = "IfNotPresent"
     }
     service = {
+      # if a nodePort was given, use NodePort — otherwise default to ClusterIP
       type     = var.node_port != null ? "NodePort" : "ClusterIP"
       port     = var.port
       nodePort = var.node_port
@@ -36,6 +38,7 @@ locals {
   }
 }
 
+# writes the values file that ArgoCD will use when deploying this service
 resource "local_file" "helm_values" {
   content  = yamlencode(local.values)
   filename = "${var.output_dir}/values-${var.namespace}-${var.name}.yaml"
