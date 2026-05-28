@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "hello-app.fullname" . }}
+  name: {{ .Values.nameOverride }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "hello-app.labels" . | nindent 4 }}
+    app: {{ .Values.nameOverride }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "hello-app.selectorLabels" . | nindent 6 }}
+      app: {{ .Values.nameOverride }}
   template:
     metadata:
       labels:
-        {{- include "hello-app.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.nameOverride }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Values.nameOverride }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           # args are only needed for images like http-echo that require flags to run
@@ -32,19 +32,9 @@ spec:
           # readiness probe tells k8s when the pod is ready to serve traffic
           # without this, requests can hit the pod before it's actually up
           readinessProbe:
-            httpGet:
-              path: {{ .Values.readinessProbe.httpGet.path }}
-              port: {{ .Values.readinessProbe.httpGet.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
-            requests:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
-            limits:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
+            {{- toYaml .Values.resources | nindent 12 }}
           # only mount the html volume if custom content was provided (frontend only)
           {{- if .Values.html }}
           volumeMounts:
@@ -56,5 +46,5 @@ spec:
       volumes:
         - name: html
           configMap:
-            name: {{ include "hello-app.fullname" . }}-html
+            name: {{ .Values.nameOverride }}-html
       {{- end }}

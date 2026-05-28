@@ -2,14 +2,14 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "hello-app.fullname" . }}
+  name: {{ .Values.nameOverride }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "hello-app.labels" . | nindent 4 }}
+    app: {{ .Values.nameOverride }}
 spec:
   podSelector:
     matchLabels:
-      {{- include "hello-app.selectorLabels" . | nindent 6 }}
+      app: {{ .Values.nameOverride }}
   policyTypes:
     - Ingress
     - Egress
@@ -20,7 +20,7 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              app.kubernetes.io/name: {{ .Values.networkPolicy.ingressFromApp }}
+              app: {{ .Values.networkPolicy.ingressFromApp }}
       ports:
         - port: {{ .Values.service.port }}
           protocol: TCP

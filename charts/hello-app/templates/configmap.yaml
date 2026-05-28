@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "hello-app.fullname" . }}-html
+  name: {{ .Values.nameOverride }}-html
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "hello-app.labels" . | nindent 4 }}
+    app: {{ .Values.nameOverride }}
 data:
   index.html: |
     {{ .Values.html | nindent 4 }}

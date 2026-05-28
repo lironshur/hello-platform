@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "hello-app.fullname" . }}
+  name: {{ .Values.nameOverride }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "hello-app.labels" . | nindent 4 }}
+    app: {{ .Values.nameOverride }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -17,4 +17,4 @@ spec:
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
   selector:
-    {{- include "hello-app.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.nameOverride }}
